@@ -1,0 +1,12 @@
+﻿@page "/Login"
+@inherits LoginViewModel
+
+<h3>Login</h3>
+
+<div style="display:flex; flex-direction:column; gap:10px; width:300px;">
+
+    <input type="text" placeholder="ID" @bind-value=UserId />
+    <input type="password" placeholder="パスワード" @bind-value=Password />
+
+    <button @onclick=Login>ログイン</button>
+</div>

@@ -1,0 +1,33 @@
+﻿@inject NavigationManager NavigationManager;
+@inject AuthenticateProvider _authProvider;
+@using BlazorServerSample.ToolKit.Auth;
+@layout BlankLayout;
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // ローカルストレージから認証データを取得し同期する
+            await _authProvider.LoadAuthenticationStateAsync();
+
+            // Microsoft公式と同じ認証状態の確認方法です
+            if (authenticationState is not null)
+            {
+                var authState = await authenticationState;
+                var user = authState?.User;
+
+                if (user?.Identity is not null && user.Identity.IsAuthenticated)
+                {
+                    return;
+                }
+            }
+            NavigationManager.NavigateTo("/Login", true);
+        }
+
+        NavigationManager.NavigateTo("/Login", true);
+    }
+}
